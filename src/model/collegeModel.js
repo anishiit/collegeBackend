@@ -6,6 +6,10 @@ const collegeSchema = new Schema({
         type : String ,
         required:true
     },
+    isVerified:{
+        type: Boolean,
+        default: false
+    },
     plan : {
         type:String ,
         enum : ['free' ,'standard' , 'premium'],
@@ -22,7 +26,7 @@ const collegeSchema = new Schema({
     password: {
          type: String,
           required: true },
-  createdAt: { 
+    createdAt: { 
     type: Date,
      default: Date.now },
     

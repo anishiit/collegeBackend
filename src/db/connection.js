@@ -1,13 +1,13 @@
 import mongoose, { model } from "mongoose";
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/collegeBackend';
+const COLLEGE_MONGODB_URI = process.env.COLLEGE_MONGODB_URI;
 const connectDB = async () => {
     try {
-        await mongoose.connect(MONGO_URI);
+        await mongoose.connect(COLLEGE_MONGODB_URI);
         console.log('MongoDB Connected...');
     } catch (error) {
-        console.error('error connecting to mongodb',error)
-
+        console.error('error connecting to mongodb')
+        throw error
     }
 }
 

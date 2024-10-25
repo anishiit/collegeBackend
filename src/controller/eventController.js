@@ -86,8 +86,9 @@ async function postEvent (req,res){
 
 async function getAllEvents (req,res){
 try {
-    const events = await Event.find()
+    const events = await Event.find({})
 } catch (error) {
     
 }
 }
+

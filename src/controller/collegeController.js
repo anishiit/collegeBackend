@@ -32,12 +32,16 @@ async function registerCollege (req,res,next){
         if(!college){
             return res.status(404).json({msg: 'No such college exist'})
         }
+        // if(college.isVefified === false){
+        // return res.status(401).json({msg: 'Your college is not verified yet'})
+        // }
         if(password?.trim() !== college.password){
             return res.status(401).json({msg: 'Invalid password'})
         }
         const coll = await College.findOne({email}).select("-password");
 
-        return res.status(200).json({msg: ' logged in successfuly',
+        return res.status(200).json({
+            msg: ' logged in successfuly',
             college: coll
         })
     } catch (error) {
