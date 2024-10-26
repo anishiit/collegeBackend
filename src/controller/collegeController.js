@@ -1,6 +1,7 @@
-import College from '../model/collegeModel.js'
+import {College} from "../db/connection.js";
+import { User } from "../db/connection.js";
 
-async function registerCollege (req,res,next){
+export async function registerCollege (req,res,next){
     try {
         const {collegeName , plan ,phone , website , linkedin ,email , password} = req.body;
         const existingCollege =await College.findOne({email});
@@ -25,7 +26,7 @@ async function registerCollege (req,res,next){
     }
 }
 
- async function loginCollege(req , res,next){
+export async function loginCollege(req , res,next){
     try {
         const {email , password} = req.body;
         const college = await College.findOne({email});
@@ -51,7 +52,23 @@ async function registerCollege (req,res,next){
     }
 }
 
-export {
-    registerCollege,
-    loginCollege
+export async function getCollegeUsers(req, res){
+    try {
+        const {collegeName} = req.body;
+        const college = await College.findOne({name: collegeName});
+        if(!college){
+            return res.status(404).json({msg: 'No such college exist'})
+        }
+        const users = await User.find({collegeName: collegeName});
+
+        return res.status(200).json({
+            msg: 'Users fetched successfully',
+            users: users
+        })
+
+    } catch (error) {
+        return res.status(500).json({msg: 'Something went wrong while fetching college users!'})
+    }
 }
+
+// export async function delete 

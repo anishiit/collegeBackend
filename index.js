@@ -1,7 +1,7 @@
 import "dotenv/config"
 import express from 'express';
 import cors from 'cors';
-import connectDB from './src/db/connection.js'
+import {connectDB} from './src/db/connection.js'
 import {collegeRouter} from './src/routes/collegeRoutes.js'
 import eventRouter from "./src/routes/eventRoutes.js";
 

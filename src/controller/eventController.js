@@ -1,5 +1,5 @@
 import Event from  "../model/eventModel.js"
-import College from "../model/collegeModel.js";
+import {College} from "../db/connection.js";
 
 import { uploadImageOnCloudinary } from "../services/cloudinary.js"
 

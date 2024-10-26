@@ -1,14 +1,35 @@
 import mongoose, { model } from "mongoose";
+import userSchema from "../model/userModel.js";
+import collegeSchema from "../model/collegeModel.js";
 
-const COLLEGE_MONGODB_URI = process.env.COLLEGE_MONGODB_URI;
-const connectDB = async () => {
+const collegeDbUri = process.env.COLLEGE_MONGODB_URI;
+const userDbUri = process.env.USER_MONGODB_URI;
+
+let College;
+let User;
+export async function connectDB() {
     try {
-        await mongoose.connect(COLLEGE_MONGODB_URI);
-        console.log('MongoDB Connected...');
+        // Create connections for both databases
+        const userDbConnection = mongoose.createConnection(userDbUri);
+        console.log('User Database connected successfully');
+
+        const collegeDbConnection = mongoose.createConnection(collegeDbUri);
+        console.log('Chat Database connected successfully');
+
+        // console.log("userDbConnectionResponse : ", userDbConnection)
+        // console.log("chatDbConnectionResponse : ", chatDbConnection)
+        User = userDbConnection.model('User', userSchema);
+        College = collegeDbConnection.model("College" , collegeSchema);
+
+        if(!User && !College){
+           throw "Models not connected!"
+        }
+
+        return { userDbConnection, collegeDbConnection };
+
     } catch (error) {
-        console.error('error connecting to mongodb')
-        throw error
+        console.error('Error connecting to MongoDB:', error.message);
     }
 }
 
-export default connectDB;
+export {College , User}
