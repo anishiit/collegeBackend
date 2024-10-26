@@ -1,4 +1,4 @@
-import Event from  "../model/eventModel.js"
+import {Event} from  "../db/connection.js"
 import {College} from "../db/connection.js";
 
 import { uploadImageOnCloudinary } from "../services/cloudinary.js"
@@ -27,42 +27,43 @@ export async function postEvent (req,res){
             })
         }
 
-
         const file = req.file;
-        let imageInfo ={}
-        if (file){
-            const filepath =file.path;
-            if(!filepath){
-                return res.status(500).json({
-                    msg: "Something went wrong while uploading image file"
-                })
-            }
-            const cloudinaryResponse = await uploadImageOnCloudinary(filepath);
-            if(!cloudinaryResponse){
+
+        let thumbnailInfo = {}
+        if(file){
+            const filePath = file.path;
+            if(!filePath){
                 return res.status(500).json({
                     msg:"Something went wrong while uploading image file"
                 })
             }
-            imageInfo ={
-                ...imageInfo,
+            const cloudinaryResponse = await uploadImageOnCloudinary(filePath);
+            if(!cloudinaryResponse){
+                return res.status(500).json({
+                    msg:"Something went wrong while uploading on Clodinary"
+                })
+            }
+            thumbnailInfo = {
+                ...thumbnailInfo,
                 fileUrl:cloudinaryResponse.secure_url,
                 asset_id:cloudinaryResponse.asset_id,
                 public_id:cloudinaryResponse.public_id,
                 api_key:cloudinaryResponse.api_key,
             }
-        }
-        if(!imageInfo){
-            return res.status(500).json({
-                msg:"something went wrong!!!"
-            })
+        
+            if(!thumbnailInfo){
+                return res.status(500).json({
+                    msg:"something went wrong!!!"
+                })
+            }
         }
         //create new event 
         const newEvent  = await Event.create({
             name:name?.trim(),
             collegeId:collegeId?.trim(),
             description:description?.trim(),
-            image:imageInfo?.fileUrl,
-            imageInfo:imageInfo,
+            image:thumbnailInfo.fileUrl,
+            imageInfo:thumbnailInfo,
         })
 
         if(!newEvent){
@@ -72,7 +73,7 @@ export async function postEvent (req,res){
         }
         return res.status(201).json({
             msg:"event created successfully",
-            post:postEvent,
+            event:newEvent,
         })  
 
     } catch (error) {
@@ -87,6 +88,12 @@ export async function postEvent (req,res){
 export async function getAllEvents (req,res){
     const {collegeId} = req.body;
 try {
+    const college = await College.findById(collegeId);
+    if(!college){
+        return res.status(404).json({
+            msg:"No such college exist with given collegeId!"
+        })
+    }
     const events = await Event.find({collegeId:collegeId});
     if(!events){
         return res.status(404).json({
