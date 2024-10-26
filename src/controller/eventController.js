@@ -115,19 +115,20 @@ try {
 
 export async function updateEvent (req,res){
     try {
-
+        // console.log(req.body)
         const {eventId,name,description} = req.body;
+        // console.log(eventId)
 
-        const user = await Event.findById(eventId);
-        if(!user){
+        const event = await Event.findById(eventId);
+        if(!event){
             return res.status(404).json({
-                msg:"No such user Exist with given userId!"
+                msg:"No such Event exist with given eventId!"
             })
         }
 
         const updatedUser = await Event.findByIdAndUpdate(eventId,{
-            name:name,
-            description:description,
+            name:name?.trim(),
+            description:description?.trim(),
         },{new:true})
 
         if(!updatedUser){
