@@ -149,6 +149,33 @@ export async function deleteCollege(req, res){
         })
         }
 }
+export async function blockCollege(req, res){
+    try {
+        const {collegeId} = req.body;
+        const college = await College.findById(collegeId);
+        if(!college){
+            return res.status(404).json({
+                msg: 'No such college exist'
+            })
+        }
+        await College.findByIdAndUpdate(college._id , {isBlocked: true})
+        .then(()=>{
+            return res.status(200).json({
+                msg: 'College blocked successfully'
+            })
+        }).catch((err)=>{
+            console.log(err)
+            return res.status(500).json({
+                msg: 'Something went wrong while blocking college!!'
+            })
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg: 'Something went wrong while blocking college'
+        })
+        }
+}
 export async function getCollegeUsers(req, res){
     try {
         const {collegeName} = req.body;

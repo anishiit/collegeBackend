@@ -19,6 +19,8 @@ const collegeSchema = new Schema({
     linkedin: { type: String, required: true },
 
     isVerified:{type: Boolean,default: false},
+
+    isBlocked:{type: Boolean,default: false},
 },{
     timestamps : true
 });
