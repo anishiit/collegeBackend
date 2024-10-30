@@ -52,6 +52,75 @@ export async function loginCollege(req , res,next){
     }
 }
 
+export async function getAllColleges(req, res){
+    try {
+      const colleges =  await College.find({isVerified: true});
+    return res.status(200).json({
+        msg: 'Colleges fetched successfully',
+        colleges
+    })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg : " Something went wrong while fetching colleges"
+
+        })
+    }
+}
+
+export async function getNonVarifiedColleges(req, res){
+    try {
+       const colleges = await College.find({isVerified: false})
+       return res.status(200).json({
+           msg: 'Colleges fetched successfully',
+           colleges
+       })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg: 'Something went wrong while fetching non verified colleges'
+        })
+    }
+}
+
+export async function verifyCollege(req, res){
+    try {
+        const {collegeId} = req.body;
+        const college= await College.findById(collegeId);
+        if(!college){
+            return res.status(404).json({
+                msg: 'No such college exist'
+            })
+        }
+       
+        if(college.isVerified == true){
+            return res.status(400).json({
+                msg: 'This college is already verified'
+            })
+        }
+        await College.findByIdAndUpdate(college._id , {isVerified: true})
+        .then(()=>{
+             return res.status(200).json({
+            msg: 'College verified successfully'
+        })
+        }).catch((err)=>{
+            console.log(err)
+            return res.status(500).json({
+                msg: 'Something went wrong while verifying college!!'
+            })
+        })
+       
+    
+        
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg: 'Something went wrong while verifying college'
+        })
+    }
+}
 export async function getCollegeUsers(req, res){
     try {
         const {collegeName} = req.body;
