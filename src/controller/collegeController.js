@@ -41,6 +41,9 @@ export async function loginCollege(req , res,next){
         if(coll.isVerified == false){
             return res.status(401).json({msg:"Your College is not verified yet!"})
         }
+        if(coll.isBlocked == true){
+            return res.status(401).json({msg:"Your College is blocked! Please contact Admin"})
+        }
         return res.status(200).json({
             msg: ' logged in successfuly',
             college: coll
