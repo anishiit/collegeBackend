@@ -29,3 +29,4 @@ app.get('/' , (req,res)=>{
 // Routes
 app.use('/college' ,collegeRouter);
 app.use('/event' ,eventRouter);
+

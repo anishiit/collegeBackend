@@ -24,7 +24,7 @@ export async function connectDB() {
         College = collegeDbConnection.model("College" , collegeSchema);
         Event = collegeDbConnection.model("Event" , eventSchema);
 
-        if(!User && !College){
+        if(!User && !College && !Event){
            throw "Models not connected!"
         }
 
