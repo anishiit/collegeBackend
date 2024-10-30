@@ -121,6 +121,34 @@ export async function verifyCollege(req, res){
         })
     }
 }
+
+export async function deleteCollege(req, res){
+    try {
+        const {collegeId} = req.body;
+        const college = await College.findById(collegeId);
+        if(!college){
+            return res.status(404).json({
+                msg: 'No such college exist'
+            })
+        }
+        await College.findByIdAndDelete(college._id)
+        .then(()=>{
+            return res.status(200).json({
+                msg: 'College deleted successfully'
+            })
+        }).catch((err)=>{
+            console.log(err)
+            return res.status(500).json({
+                msg: 'Something went wrong while deleting college!!'
+            })
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg: 'Something went wrong while deleting college'
+        })
+        }
+}
 export async function getCollegeUsers(req, res){
     try {
         const {collegeName} = req.body;
