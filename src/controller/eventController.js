@@ -6,7 +6,7 @@ import { uploadImageOnCloudinary } from "../services/cloudinary.js"
 
 export async function postEvent (req,res){
     try {
-        const {collegeId , name , description} = req.body;
+        const {collegeId , name , description, imageInfo} = req.body;
         
         if(!name || !collegeId || !description ){
             return res.status(400).json({
@@ -18,7 +18,7 @@ export async function postEvent (req,res){
                 message:"all fields are required!"
             })
         }
-        console.log(collegeId , name , description);
+        // console.log(collegeId , name , description);
 
         const college = await College.findById(collegeId);
         if(!college){
@@ -26,44 +26,14 @@ export async function postEvent (req,res){
                 msg:"no such college exist"
             })
         }
-
-        const file = req.file;
-
-        let thumbnailInfo = {}
-        if(file){
-            const filePath = file.path;
-            if(!filePath){
-                return res.status(500).json({
-                    msg:"Something went wrong while uploading image file"
-                })
-            }
-            const cloudinaryResponse = await uploadImageOnCloudinary(filePath);
-            if(!cloudinaryResponse){
-                return res.status(500).json({
-                    msg:"Something went wrong while uploading on Clodinary"
-                })
-            }
-            thumbnailInfo = {
-                ...thumbnailInfo,
-                fileUrl:cloudinaryResponse.secure_url,
-                asset_id:cloudinaryResponse.asset_id,
-                public_id:cloudinaryResponse.public_id,
-                api_key:cloudinaryResponse.api_key,
-            }
         
-            if(!thumbnailInfo){
-                return res.status(500).json({
-                    msg:"something went wrong!!!"
-                })
-            }
-        }
         //create new event 
         const newEvent  = await Event.create({
             name:name?.trim(),
             collegeId:collegeId?.trim(),
             description:description?.trim(),
-            image:thumbnailInfo.fileUrl,
-            imageInfo:thumbnailInfo,
+            image:imageInfo?.secure_url,
+            imageInfo:imageInfo,
         })
 
         if(!newEvent){
