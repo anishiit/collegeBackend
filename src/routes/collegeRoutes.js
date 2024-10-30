@@ -7,8 +7,8 @@ collegeRouter.route('/register').post(registerCollege);
 collegeRouter.route('/login').post(loginCollege);
 collegeRouter.route('/getcollegeusers').post(getCollegeUsers);
 collegeRouter.route('/verifycollege').post(verifyCollege); //colegeId
-collegeRouter.route('/getallcolleges').get(getAllColleges);
-collegeRouter.route('/getnonverifiedcolleges').get(getNonVarifiedColleges);
+collegeRouter.route('/getallcolleges').post(getAllColleges);
+collegeRouter.route('/getnonverifiedcolleges').post(getNonVarifiedColleges);
 
 
 export {collegeRouter}
