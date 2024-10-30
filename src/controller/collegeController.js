@@ -72,6 +72,21 @@ export async function getAllColleges(req, res){
     }
 }
 
+export async function getAllCollegeCount(req, res){
+    try {
+       const count = await College.countDocuments();
+       return res.status(200).json({
+           msg: 'Count fetched successfully',
+           count
+       })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg: 'Something went wrong while fetching count'
+        })
+    }
+}
 export async function getNonVarifiedColleges(req, res){
     try {
        const colleges = await College.find({isVerified: false})

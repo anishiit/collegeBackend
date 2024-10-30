@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {registerCollege , loginCollege, getCollegeUsers ,getAllColleges ,getNonVarifiedColleges ,verifyCollege ,deleteCollege , blockCollege} from '../controller/collegeController.js'
+import {registerCollege , loginCollege, getCollegeUsers ,getAllColleges ,getNonVarifiedColleges ,verifyCollege ,deleteCollege , blockCollege ,getAllCollegeCount} from '../controller/collegeController.js'
 
 const collegeRouter = Router();
 
@@ -11,6 +11,7 @@ collegeRouter.route('/getallcolleges').post(getAllColleges);
 collegeRouter.route('/getnonverifiedcolleges').post(getNonVarifiedColleges);
 collegeRouter.route('/deletecollege').post(deleteCollege);
 collegeRouter.route('/blockcollege').post(blockCollege);
+collegeRouter.route('/getallcollegecount').post(getAllCollegeCount);
 
 
 export {collegeRouter}
