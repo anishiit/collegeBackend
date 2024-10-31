@@ -27,7 +27,7 @@ export async function createStudenthubElement(req, res) {
         }
 
         const college = await College.findOne({name:collegeName});
-        
+
         if(!college._id) {
             return res.status(404).json({
                 message: "No such college exist with given collegeName!"  
@@ -84,7 +84,7 @@ export async function getAllCollegeStudenthubElement(req, res) {
             })
         }
 
-        const studenthub = await Studenthub.find({collegeId: college._id}).populate({path:"collegeId", select:"_id name email"});
+        const studenthub = await Studenthub.find({collegeId: college._id}).populate({path:"collegeId", select:"_id name email"}).sort({createdAt: -1});
 
         return res.status(200).json({
             message: "studenthub fetched successfully!",
