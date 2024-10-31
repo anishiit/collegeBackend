@@ -4,6 +4,7 @@ import cors from 'cors';
 import {connectDB} from './src/db/connection.js'
 import {collegeRouter} from './src/routes/collegeRoutes.js'
 import eventRouter from "./src/routes/eventRoutes.js";
+import studenthubRouter from "./src/routes/studenthubRoutes.js"
 
 
 const app = express();
@@ -29,4 +30,5 @@ app.get('/' , (req,res)=>{
 // Routes
 app.use('/college' ,collegeRouter);
 app.use('/event' ,eventRouter);
+app.use('/studenthub', studenthubRouter);
 
