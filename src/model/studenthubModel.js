@@ -1,9 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
+import { User } from "../db/connection.js";
 
 const studenthubSchema = new mongoose.Schema({
     proposedBy : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"User"  
+        type: {
+            name : String, _id:mongoose.Schema.Types.ObjectId, email:String
+        }
     },
     collegeId:{
         type : mongoose.Schema.Types.ObjectId ,

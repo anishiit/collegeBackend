@@ -37,7 +37,9 @@ export async function createStudenthubElement(req, res) {
         const newStudenthub = new Studenthub({
             title: title?.trim(),
             type: type?.trim(),
-            proposedBy: student._id,
+            proposedBy: {
+                _id: student._id, name: student.name, email: student.email
+            },
             collegeId: college._id,
             description: description?.trim(),
             implementation: implementation?.trim(),
@@ -84,7 +86,10 @@ export async function getAllCollegeStudenthubElement(req, res) {
             })
         }
 
-        const studenthub = await Studenthub.find({collegeId: college._id}).populate({path:"collegeId", select:"_id name email"}).sort({createdAt: -1});
+        const studenthub = await Studenthub.find({ collegeId: college._id })
+        .populate({ path: "collegeId", select: "_id name email" })
+        // .populate({path:"proposedBy" , model: "User", select: "_id name email"})
+        .sort({ createdAt: -1 });
 
         return res.status(200).json({
             message: "studenthub fetched successfully!",
