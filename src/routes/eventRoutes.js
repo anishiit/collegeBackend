@@ -4,7 +4,7 @@ import { upload } from "../middlewares/multer.js";
 
 const eventRouter = Router();
 
-eventRouter.post('/createevent', upload.single('image') , postEvent);
+eventRouter.post('/createevent',postEvent);
 eventRouter.route('/getcollegeevents').post(getAllEvents);
 eventRouter.route('/updateevent').post(updateEvent);
 eventRouter.route('/deleteevent').post(deleteEvent); 
