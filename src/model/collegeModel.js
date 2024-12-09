@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const featuredAlumniSchema = new Schema({
         name:{type:String, default:""},
-        designation:{type:String, default:""},
+        achievement:{type:String, default:""},
         description:{type:String, default:""},
         image:{type:String, default:""},
 })

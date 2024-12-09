@@ -217,10 +217,10 @@ async function getCollegeUsers(req, res){
 
 async function addFeaturedAlumni(req, res) {
     try {
-      const { collegeName, alumniDetail } = req.body;
+      const { collegeName, name, achievement,description, image } = req.body;
   
       // Validate input
-      if (!collegeName || !alumniDetail) {
+      if (!collegeName && (!name && !achievement && !description && !image)) {
         return res.status(400).json({ msg: "Please provide all required fields (collegeName and alumniDetail)." });
       }
   
@@ -228,6 +228,13 @@ async function addFeaturedAlumni(req, res) {
       const college = await College.findOne({ name: collegeName });
       if (!college) {
         return res.status(404).json({ msg: "No college found with the given name." });
+      }
+
+      const alumniDetail = {
+        name,
+        achievement,
+        description,
+        image
       }
   
       // Add featured alumni
