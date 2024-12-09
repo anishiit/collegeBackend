@@ -1,7 +1,7 @@
 import {College} from "../db/connection.js";
 import { User } from "../db/connection.js";
 
-export async function registerCollege (req,res,next){
+async function registerCollege (req,res,next){
     try {
         const {collegeName , plan ,phone , website , linkedin ,email , password} = req.body;
         const existingCollege =await College.findOne({email});
@@ -26,7 +26,7 @@ export async function registerCollege (req,res,next){
     }
 }
 
-export async function loginCollege(req , res,next){
+async function loginCollege(req , res,next){
     try {
         const {email , password} = req.body;
         const college = await College.findOne({email});
@@ -55,7 +55,7 @@ export async function loginCollege(req , res,next){
     }
 }
 
-export async function getAllColleges(req, res){
+async function getAllColleges(req, res){
     try {
       const colleges =  await College.find({isVerified: true});
     return res.status(200).json({
@@ -72,7 +72,7 @@ export async function getAllColleges(req, res){
     }
 }
 
-export async function getAllCollegeCount(req, res){
+async function getAllCollegeCount(req, res){
     try {
        const count = await College.countDocuments();
        return res.status(200).json({
@@ -87,7 +87,7 @@ export async function getAllCollegeCount(req, res){
         })
     }
 }
-export async function getNonVarifiedColleges(req, res){
+async function getNonVarifiedColleges(req, res){
     try {
        const colleges = await College.find({isVerified: false})
        return res.status(200).json({
@@ -103,7 +103,7 @@ export async function getNonVarifiedColleges(req, res){
     }
 }
 
-export async function verifyCollege(req, res){
+async function verifyCollege(req, res){
     try {
         const {collegeId} = req.body;
         const college= await College.findById(collegeId);
@@ -140,7 +140,7 @@ export async function verifyCollege(req, res){
     }
 }
 
-export async function deleteCollege(req, res){
+async function deleteCollege(req, res){
     try {
         const {collegeId} = req.body;
         const college = await College.findById(collegeId);
@@ -167,7 +167,8 @@ export async function deleteCollege(req, res){
         })
         }
 }
-export async function blockCollege(req, res){
+
+async function blockCollege(req, res){
     try {
         const {collegeId} = req.body;
         const college = await College.findById(collegeId);
@@ -194,7 +195,8 @@ export async function blockCollege(req, res){
         })
         }
 }
-export async function getCollegeUsers(req, res){
+
+async function getCollegeUsers(req, res){
     try {
         const {collegeName} = req.body;
         const college = await College.findOne({name: collegeName});
@@ -213,4 +215,88 @@ export async function getCollegeUsers(req, res){
     }
 }
 
+async function addFeaturedAlumni(req, res) {
+    try {
+      const { collegeName, alumniDetail } = req.body;
+  
+      // Validate input
+      if (!collegeName || !alumniDetail) {
+        return res.status(400).json({ msg: "Please provide all required fields (collegeName and alumniDetail)." });
+      }
+  
+      // Check if college exists
+      const college = await College.findOne({ name: collegeName });
+      if (!college) {
+        return res.status(404).json({ msg: "No college found with the given name." });
+      }
+  
+      // Add featured alumni
+      const updatedCollege = await College.findOneAndUpdate(
+        { name: collegeName },
+        { $push: { featuredAlumni: alumniDetail } }, // $push adds to the array
+        { new: true } // Returns the updated document
+      );
+  
+      return res.status(200).json({
+        msg: "Featured Alumni added successfully.",
+        college: updatedCollege
+      });
+    } catch (error) {
+      console.error("Error adding featured alumni:", error);
+      return res.status(500).json({
+        msg: "Something went wrong while adding featured alumni!",
+        error: error.message
+      });
+    }
+}
+
+async function removeFeaturedAlumni(req, res) {
+    try {
+      const { collegeName, alumniId } = req.body;
+  
+      if (!collegeName || !alumniId) {
+        return res.status(400).json({ msg: "Please provide all required fields (collegeName and alumniId)." });
+      }
+  
+      const college = await College.findOne({ name: collegeName });
+      if (!college) {
+        return res.status(404).json({ msg: "No college found with the given name." });
+      }
+  
+      const updatedCollege = await College.findOneAndUpdate(
+        { name: collegeName },
+        { $pull: { featuredAlumni: { _id: alumniId } } }, // $pull removes from the array
+        { new: true } // Returns the updated document    
+      );    
+
+      return res.status(200).json({
+        msg: "Featured Alumni removed successfully.",
+        college: updatedCollege,
+      })
+
+    }
+    catch (error) {
+        console.error("Error removing featured alumni:", error);
+        return res.status(500).json({
+          msg: "Something went wrong while removing featured alumni!",
+          error: error.message
+        });
+    }   
+}          
+  
 // export async function delete 
+
+
+export {
+    registerCollege,
+    loginCollege,
+    getAllColleges,
+    getAllCollegeCount,
+    getNonVarifiedColleges,
+    verifyCollege,
+    deleteCollege,
+    blockCollege,
+    getCollegeUsers,
+    addFeaturedAlumni,
+    removeFeaturedAlumni,
+}

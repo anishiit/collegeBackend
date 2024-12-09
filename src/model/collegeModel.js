@@ -1,5 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
+const featuredAlumniSchema = new Schema({
+        name:{type:String, default:""},
+        designation:{type:String, default:""},
+        description:{type:String, default:""},
+        image:{type:String, default:""},
+})
 
 const collegeSchema = new Schema({
     name : {type : String ,required:true},
@@ -21,6 +27,11 @@ const collegeSchema = new Schema({
     isVerified:{type: Boolean,default: false},
 
     isBlocked:{type: Boolean,default: false},
+
+    featuredAlumni:[{
+      type: featuredAlumniSchema
+    }
+    ]
 },{
     timestamps : true
 });
